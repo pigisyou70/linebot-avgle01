@@ -30,19 +30,6 @@ app.post('/callback', middleware(config), (req, res) => {
 }); 
  
 
-// const messageText = {
-//   type: "text",
-//   text:"有誰"
-// }
-// const tempEvent = {
-//   type :"message",
-//   message: messageText
-// }
-  
-
-// console.log(SearchAvgle(tempEvent));
-
-
 // event handler
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -54,7 +41,7 @@ async function handleEvent(event) {
   let echo = { type: 'text', text: "請輸入文字"};
 
   if (event.message.text != undefined){
-    echo = SearchAvgle(event);
+    // echo = SearchAvgle(event);
     // let textArr = event.message.text.split(".");
     // if (textArr[0] == "avgle"){
       // echo = SearchAvgle(event);
