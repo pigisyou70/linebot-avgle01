@@ -3,7 +3,7 @@
 import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
 import Avgle from './avgle-db.js';
-
+ 
 // create LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -40,10 +40,10 @@ function handleEvent(event) {
 
 
   // create a echoing text message
-  let echo = { type: 'text', text: event.message.text };
+  var echo = { type: 'text', text: event.message.text };
 
   if (event.message.text == "推薦"){
-    echo = Avgle.SearchAvgle(event);
+    echo = SearchAvgle(event);
   }
 
   // use reply API
