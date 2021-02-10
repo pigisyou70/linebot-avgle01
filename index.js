@@ -81,7 +81,9 @@ async function handleEvent(event) {
       }
     } else if (event.message.text === "help"){
       replyText = "目前有以下這些功能：\n";
-      replyText += "avgle.{command} - 使用 Avgle API\n";
+      replyText += "avgle.推薦 - 查詢 Avgle 隨機前100名的推薦影片\n";
+      replyText += "avgle.分類 - 查詢 Avgle 分類\n";
+      replyText += "avgle.名單 - 查詢 Avgle AV 女優的名單\n";
       echo = { type: 'text', text: replyText};
     }
   }
