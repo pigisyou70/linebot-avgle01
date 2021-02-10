@@ -3,6 +3,8 @@
 import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
 import SearchAvgle from './avgle-db.js';
+import GetInvoice from './invoice.js';
+// import Weather from './weather.js';
  
 // create LINE SDK config from env variables
 const config = {
@@ -29,6 +31,7 @@ app.post('/callback', middleware(config), (req, res) => {
     });
 }); 
  
+// console.log(Weather());
 
 // event handler
 async function handleEvent(event) {
@@ -38,8 +41,9 @@ async function handleEvent(event) {
   }
 
   // create a echoing text message
-  let echo = { type: 'text', text: "請輸入文字"};
+  let echo = { type: 'text', text: event.message.text};
 
+  
   if (event.message.text != undefined){
     // echo = SearchAvgle(event);
     // let textArr = event.message.text.split(".");
