@@ -12,9 +12,6 @@ function GetInvoice(event){
     let msg = "";
     let url = "https://invoice.etax.nat.gov.tw/invoice.xml";
 
-    // 台南市的氣溫
-    // var url = "http://www.wunderground.com/weather-forecast/zmw:00000.1.59358";
-
     // 取得網頁資料
     request(url, function (error, response, body) {
         if (!error) {

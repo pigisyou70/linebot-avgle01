@@ -4,7 +4,7 @@ import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
 import SearchAvgle from './avgle-db.js';
 import GetInvoice from './invoice.js';
-// import Weather from './weather.js';
+import Weather from './weather.js';
  
 // create LINE SDK config from env variables
 const config = {
@@ -31,6 +31,9 @@ app.post('/callback', middleware(config), (req, res) => {
     });
 }); 
  
+const data = await rp({ url: 'https://api.avgle.com/v1/collections/[1, 250]', json: true });
+
+// console.log(SearchAvgle());
 // console.log(Weather());
 
 // event handler
