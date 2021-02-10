@@ -1,12 +1,16 @@
 'use strict';
 
+import rp from 'request-promise'
+
+
 const line = require('@line/bot-sdk');
 const express = require('express');
 
 // create LINE SDK config from env variables
 const config = {
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+  channelId: process.env.CHANNEL_ID,
   channelSecret: process.env.CHANNEL_SECRET,
+  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 };
 
 // create LINE SDK client
