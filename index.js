@@ -5,7 +5,9 @@ import express from 'express';
 import SearchAvgle from './avgle-db.js';
 import GetInvoice from './invoice.js';
 import Weather from './weather.js';
- 
+import rp from 'request-promise';
+
+
 // create LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -31,11 +33,59 @@ app.post('/callback', middleware(config), (req, res) => {
     });
 }); 
  
-const data = await rp({ url: 'https://api.avgle.com/v1/collections/[1, 250]', json: true });
+
+// getCollections();
+// console.log("\n");
+// getCategories();
+// console.log("\n");
+// getRecommend();
+
+
+
+async function getCollections(){
+  let collect = "";
+  const data = await rp({ url: 'https://api.avgle.com/v1/collections/[1, 250]', json: true });
+  for (let i = 0; i < data.response.collections.length; i++) {
+    collect += data.response.collections[i].title + '\n'
+    console.log(data.response.collections[i]);
+    console.log("\n");
+  }
+  return collect;
+
+}
+
+ 
+async function getCategories(){
+  let categories = "";
+  const sort = await rp({ url: 'https://api.avgle.com/v1/categories', json: true });
+  for (let i = 0; i < sort.response.categories.length; i++) {
+    categories += sort.response.categories[i].shortname + '\n'
+  }
+  // console.log(categories);
+  return categories;
+
+}
+
+async function getRecommend(){
+  let msg = "";
+  const recommend = await rp({ url: 'https://api.avgle.com/v1/videos/[1, 100]', json: true });
+  const rand = Math.floor((Math.random() * recommend.response.videos.length));
+  for (let i = 0; i < recommend.response.videos.length; i++) {
+    msg = [{
+      type: 'text',
+      text: recommend.response.videos[rand].title + '\n'
+    }, {
+      type: 'text',
+      text: recommend.response.videos[rand].video_url + '\n'
+    }]
+  }
+  return msg;
+  // console.log(msg);
+}
 
 // console.log(SearchAvgle());
 // console.log(Weather());
-
+ 
 // event handler
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -44,10 +94,24 @@ async function handleEvent(event) {
   }
 
   // create a echoing text message
-  let echo = { type: 'text', text: event.message.text};
-
+  let replyText = event.message.text;
+  let echo = { type: 'text', text: replyText};
   
   if (event.message.text != undefined){
+    var strArray = [];
+    strArray = event.message.text.split(".");
+    if (strArray[0] === "avgle"){
+      if (strArray[1] === "推薦"){
+        echo = getRecommend();
+
+      } else if (strArray[1] === "分類"){
+        replyText = getCategories();
+
+      } else if (strArray[1] === "名單"){
+        replyText = getCollections();
+
+      }
+    }
     // echo = SearchAvgle(event);
     // let textArr = event.message.text.split(".");
     // if (textArr[0] == "avgle"){
@@ -58,6 +122,7 @@ async function handleEvent(event) {
     // }
 
   }
+  
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
