@@ -2,6 +2,7 @@
 
 import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
+import Avgle from './avgle-db.js';
 
 // create LINE SDK config from env variables
 const config = {
@@ -11,6 +12,8 @@ const config = {
 
 // create LINE SDK client
 const client = new Client(config);
+
+// const avgle = new Avgle();
 
 // create Express app
 // about Express itself: https://expressjs.com/
@@ -27,7 +30,7 @@ app.post('/callback', middleware(config), (req, res) => {
       res.status(500).end();
     });
 }); 
-
+ 
 // event handler
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -35,8 +38,13 @@ function handleEvent(event) {
     return Promise.resolve(null);
   }
 
+
   // create a echoing text message
-  const echo = { type: 'text', text: event.message.text };
+  let echo = { type: 'text', text: event.message.text };
+
+  if (event.message.text == "推薦"){
+    echo = Avgle.SearchAvgle(event);
+  }
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);

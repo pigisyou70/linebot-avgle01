@@ -1,4 +1,8 @@
-function SearchAvgle(event){
+export default SearchAvgle;
+
+import rp from 'request-promise';
+
+async function SearchAvgle(event){
     let msg = "";
 
     try{
