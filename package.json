@@ -4,13 +4,16 @@
   "description": "An example LINE bot just to echo messages",
   "main": "index.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "dev": "nodemon index.js"
   },
-  "author":"ZanCheng Lin",
-  "license":"ISC",
+  "author": "ZanCheng Lin",
+  "license": "ISC",
+  "type": "module",
   "dependencies": {
     "@line/bot-sdk": "^6.8.0",
     "express": "^4.16.3",
+    "nodemon": "^2.0.7",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   }
