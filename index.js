@@ -2,7 +2,7 @@
 
 import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
-import Avgle from './avgle-db.js';
+import SearchAvgle from './avgle-db.js';
  
 // create LINE SDK config from env variables
 const config = {
@@ -12,8 +12,6 @@ const config = {
 
 // create LINE SDK client
 const client = new Client(config);
-
-// const avgle = new Avgle();
 
 // create Express app
 // about Express itself: https://expressjs.com/
@@ -31,6 +29,20 @@ app.post('/callback', middleware(config), (req, res) => {
     });
 }); 
  
+
+// const messageText = {
+//   type: "text",
+//   text:"有誰"
+// }
+// const tempEvent = {
+//   type :"message",
+//   message: messageText
+// }
+  
+
+// console.log(SearchAvgle(tempEvent));
+
+
 // event handler
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -38,12 +50,19 @@ function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-
   // create a echoing text message
-  var echo = { type: 'text', text: event.message.text };
+  let echo = { type: 'text', text: "請輸入文字"};
 
-  if (event.message.text == "推薦"){
+  if (event.message.text != undefined){
     echo = SearchAvgle(event);
+    // let textArr = event.message.text.split(".");
+    // if (textArr[0] == "avgle"){
+      // echo = SearchAvgle(event);
+    //   console.log(echo);
+    // } else {
+    //   echo = { type: 'text', text: event.message.text };
+    // }
+
   }
 
   // use reply API

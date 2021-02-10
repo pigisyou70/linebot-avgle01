@@ -1,6 +1,11 @@
 export default SearchAvgle;
+// export default test;
 
 import rp from 'request-promise';
+
+function test(){
+    return "Avgle Test !";
+}
 
 async function SearchAvgle(event){
     let msg = "";
@@ -448,5 +453,6 @@ async function SearchAvgle(event){
     } catch (error) {
         msg = '發生錯誤';
     }
+
     return msg;
 }
