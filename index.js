@@ -37,18 +37,30 @@ app.post('/callback', middleware(config), (req, res) => {
 // getCollections();
 // console.log("\n");
 // getCategories();
+// console.log(getCategories());
 // console.log("\n");
 // getRecommend();
+// Test();
 
+async function Test(){
+  let t = "avgle.分類";
+  var strArray = [];
+  strArray = t.split(".");
+  console.log(strArray);
+console.log("\n");
 
+  let replyText = "";
+  if (strArray[1] === "分類"){
+    replyText = getCategories();
+  }
+  console.log(replyText);
+}
 
 async function getCollections(){
   let collect = "";
   const data = await rp({ url: 'https://api.avgle.com/v1/collections/[1, 250]', json: true });
   for (let i = 0; i < data.response.collections.length; i++) {
     collect += data.response.collections[i].title + '\n'
-    console.log(data.response.collections[i]);
-    console.log("\n");
   }
   return collect;
 
@@ -102,15 +114,38 @@ async function handleEvent(event) {
     strArray = event.message.text.split(".");
     if (strArray[0] === "avgle"){
       if (strArray[1] === "推薦"){
-        echo = getRecommend();
+        const recommend = await rp({ url: 'https://api.avgle.com/v1/videos/[1, 100]', json: true });
+        const rand = Math.floor((Math.random() * recommend.response.videos.length));
+        for (let i = 0; i < recommend.response.videos.length; i++) {
+          msg = [{
+            type: 'text',
+            text: recommend.response.videos[rand].title + '\n'
+          }, {
+            type: 'text',
+            text: recommend.response.videos[rand].video_url + '\n'
+          }]
+        }
+        echo = msg;
 
       } else if (strArray[1] === "分類"){
-        replyText = getCategories();
+        replyText = "";
+        const sort = await rp({ url: 'https://api.avgle.com/v1/categories', json: true });
+        for (let i = 0; i < sort.response.categories.length; i++) {
+          replyText += sort.response.categories[i].shortname + '\n'
+
+        }
+        echo = { type: 'text', text: replyText};
 
       } else if (strArray[1] === "名單"){
-        replyText = getCollections();
-
+        replyText = "";
+        const data = await rp({ url: 'https://api.avgle.com/v1/collections/[1, 250]', json: true });
+        for (let i = 0; i < data.response.collections.length; i++) {
+          replyText += data.response.collections[i].title + '\n'
+        }
+        echo = { type: 'text', text: replyText};
       }
+    } else {
+      echo = { type: 'text', text: replyText};
     }
     // echo = SearchAvgle(event);
     // let textArr = event.message.text.split(".");
